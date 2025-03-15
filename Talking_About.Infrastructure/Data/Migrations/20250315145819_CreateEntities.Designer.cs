@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Talking_About.Data;
 
@@ -11,9 +12,11 @@ using Talking_About.Data;
 namespace Talking_About.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250315145819_CreateEntities")]
+    partial class CreateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,62 +31,48 @@ namespace Talking_About.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Cep")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Complement")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CorporateName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Document")
                         .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Neighborhood")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumHome")
-                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Uf")
                         .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Institutions");
                 });
@@ -292,13 +281,9 @@ namespace Talking_About.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("CommentContent")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CommentDate")
                         .HasColumnType("datetime2");
@@ -311,8 +296,6 @@ namespace Talking_About.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ReportId");
 
@@ -333,8 +316,7 @@ namespace Talking_About.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ReportId")
                         .HasColumnType("uniqueidentifier");
@@ -352,10 +334,7 @@ namespace Talking_About.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("LikeDate")
+                    b.Property<DateTime?>("LikeDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("ReportId")
@@ -366,8 +345,6 @@ namespace Talking_About.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ReportId");
 
@@ -380,29 +357,23 @@ namespace Talking_About.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool?>("IsEvent")
                         .HasColumnType("bit");
 
                     b.Property<string>("ReportDescription")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReportName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReportsDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TypeReport")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -410,16 +381,7 @@ namespace Talking_About.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.ToTable("Reports");
-                });
-
-            modelBuilder.Entity("Institution", b =>
-                {
-                    b.HasOne("Talking_About.Data.ApplicationUser", null)
-                        .WithMany("Institutions")
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -475,10 +437,6 @@ namespace Talking_About.Migrations
 
             modelBuilder.Entity("Talking_About.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("Talking_About.Data.ApplicationUser", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Talking_About.Domain.Entities.Report", "Report")
                         .WithMany("Comments")
                         .HasForeignKey("ReportId")
@@ -501,10 +459,6 @@ namespace Talking_About.Migrations
 
             modelBuilder.Entity("Talking_About.Domain.Entities.Like", b =>
                 {
-                    b.HasOne("Talking_About.Data.ApplicationUser", null)
-                        .WithMany("Likes")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Talking_About.Domain.Entities.Report", "Report")
                         .WithMany("Likes")
                         .HasForeignKey("ReportId")
@@ -512,24 +466,6 @@ namespace Talking_About.Migrations
                         .IsRequired();
 
                     b.Navigation("Report");
-                });
-
-            modelBuilder.Entity("Talking_About.Domain.Entities.Report", b =>
-                {
-                    b.HasOne("Talking_About.Data.ApplicationUser", null)
-                        .WithMany("Reports")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("Talking_About.Data.ApplicationUser", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Institutions");
-
-                    b.Navigation("Likes");
-
-                    b.Navigation("Reports");
                 });
 
             modelBuilder.Entity("Talking_About.Domain.Entities.Report", b =>
