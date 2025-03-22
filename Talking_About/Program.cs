@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
-using Talking_About.Client.Pages;
 using Talking_About.Components;
 using Talking_About.Components.Account;
 using Talking_About.Data;
+using Talking_About.Domain.Repositories;
+using Talking_About.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,12 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSenderService>();
+builder.Services.AddTransient<IReportRepository, ReportRepository>();
+builder.Services.AddTransient<IImageRepository, ImageRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
+builder.Services.AddTransient<ILikeRepository, LikeRepository>();
+builder.Services.AddTransient<IInstitutionRepository, InstitutionRepository>();
 
 var app = builder.Build();
 

@@ -10,6 +10,7 @@ public class Comment : Entity
         //Empty
     }
 
+    [Required(ErrorMessage = "Conteúdo do comentário é necessário")]
     public string CommentContent { get; set; }
 
     public DateTime CommentDate { get; set; } = DateTime.Now;
