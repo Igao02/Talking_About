@@ -27,7 +27,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine($"UserId: {UserId}, Code: {Code}");
+        
         if (UserId is null || Code is null)
         {
             RedirectManager.RedirectTo("/Account/AccessDenied");

@@ -9,8 +9,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Talking_About.Domain.csproj" />
+    <ProjectReference Include="..\Talking_About.Application\Talking_About.Application.csproj" />
     <ProjectReference Include="..\Talking_About.Client\Talking_About.Client.csproj" />
     <ProjectReference Include="..\Talking_About.Infrastructure\Talking_About.Infrastructure.csproj" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.3" />
@@ -24,5 +26,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.6" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
   </ItemGroup>
 </Project>
