@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Talking_About.Domain.csproj" />
+    <ProjectReference Include="..\SharedKernel\Talking_About.SharedKernel.csproj" />
     <ProjectReference Include="..\Talking_About.Application\Talking_About.Application.csproj" />
     <ProjectReference Include="..\Talking_About.Client\Talking_About.Client.csproj" />
     <ProjectReference Include="..\Talking_About.Infrastructure\Talking_About.Infrastructure.csproj" />

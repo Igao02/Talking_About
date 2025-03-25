@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
 using System.Reflection;
 using Talking_About.Api.Extensions;
+using Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
 using Talking_About.Components;
 using Talking_About.Components.Account;
 using Talking_About.Data;
 using Talking_About.Domain.Repositories;
+using Talking_About.Endpoints;
 using Talking_About.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents()
     .AddAuthenticationStateSerialization();
 builder.Services.AddFluentUIComponents();
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
@@ -37,9 +41,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddSignInManager()
-    //.AddRoles<IdentityRole>()
+    .AddRoles<IdentityRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddMediatR(cfg =>
+           cfg.RegisterServicesFromAssembly(typeof(CreateReportCommand).Assembly));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
@@ -54,6 +61,10 @@ builder.Services.AddTransient<IInstitutionRepository, InstitutionRepository>();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -62,16 +73,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
@@ -79,6 +80,9 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Talking_About.Client._Imports).Assembly);
 
-app.MapAdditionalIdentityEndpoints();
+//app.MapAdditionalIdentityEndpoints();
+app.MapIdentityApi<ApplicationUser>();
+app.UseAntiforgery();
+app.MapEndpoints();
 
 app.Run();

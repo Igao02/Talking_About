@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
-using Talking_About.Api.Endpoints;
+using Talking_About.Common.Api;
 
 namespace Talking_About.Api.Extensions;
 

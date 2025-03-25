@@ -1,4 +1,4 @@
-﻿namespace Talking_About.Api.Endpoints;
+﻿namespace Talking_About.Common.Api;
 
 public interface IEndpoint
 {

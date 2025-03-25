@@ -1,47 +1,34 @@
-﻿using System.Security.Claims;
-using Talking_About.Api.Endpoints;
+﻿using MediatR;
+using Talking_About.Api.Infrastructure;
 using Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
+using Talking_About.Common.Api;
+using Talking_About.Extensions;
+using Talking_About.SharedKernel;
 
-namespace Talking_About.API.Endpoints.Report
+namespace Talking_About.Api.Endpoints.Reports;
+
+internal sealed class CreateReportEndpoint : IEndpoint
 {
-    public class CreateReportEndpoint : IEndpoint
+    public sealed record Request(string ReportName, string TypeReport, string ReportDescription, string UserName, bool IsEvent);
+
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        public static void Map(IEndpointRouteBuilder app)
+        app.MapPost("/reports/create", async (Request request, ISender sender, CancellationToken cancellationToken) =>
         {
-            app.MapPost("/reports", HandleAsync)
-                .WithName("Reports: Create")
-                .WithSummary("Cria um novo relatório")
-                .WithDescription("Cria um novo relatório de denúncia")
-                .WithOrder(1)
-                .Produces<Response>(); // Usa sua classe Response(Guid Id)
-        }
+            // Criação do comando com os dados recebidos
+            var command = new CreateReportCommand(
+                request.ReportName,
+                request.TypeReport,
+                request.ReportDescription,
+                request.UserName,  // O nome do usuário pode ser recuperado da autenticação aqui
+                request.IsEvent);
 
+            // Explicitly cast the result to Result<Guid>
+            Result<Guid> result = (Result<Guid>)await sender.Send(command, cancellationToken);
 
-        public void MapEndpoint(IEndpointRouteBuilder app)
-        {
-            Map(app);
-        }
-
-        private static async Task<IResult> HandleAsync(
-            ClaimsPrincipal user,
-            CreateReportHandler handler,
-            CreateReportCommand command)
-        {
-            var updatedCommand = command with { UserName = user.Identity?.Name ?? string.Empty }; // Captura o usuário autenticado
-
-            // Chama o Handler para processar o comando
-            try
-            {
-                var result = await handler.Handle(updatedCommand);
-
-                // Retorna resultado com Created status
-                return TypedResults.Created($"/reports/{result.Id}", result);
-            }
-            catch (InvalidOperationException)
-            {
-                // Retorna BadRequest caso o usuário não esteja autenticado
-                return TypedResults.BadRequest("Usuário não autenticado.");
-            }
-        }
+            // Retorna a resposta adequada
+            return result.Match(Results.Ok, CustomResults.Problem);
+        })
+        .WithTags("Reports");// Ensure you have the necessary using directives
     }
 }

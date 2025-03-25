@@ -1,40 +1,44 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Talking_About.Data;
+﻿using Application.Abstractions.Messaging;
+using Microsoft.AspNetCore.Http;
 using Talking_About.Domain.Entities;
 using Talking_About.Domain.Repositories;
+using Talking_About.SharedKernel;
 
 namespace Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
 
-public sealed class CreateReportHandler
+public sealed class CreateReportHandler : ICommandHandler<CreateReportCommand, Guid>
 {
     private readonly IReportRepository _reportRepository;
-    private readonly AuthenticationStateProvider _authentiactionStateProvider;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CreateReportHandler(IReportRepository reportRepository, AuthenticationStateProvider authentiactionStateProvider, UserManager<ApplicationUser> userManager)
+    public CreateReportHandler(IReportRepository reportRepository, IHttpContextAccessor httpContextAccessor)
     {
         _reportRepository = reportRepository;
-        _authentiactionStateProvider = authentiactionStateProvider;
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<Response> Handle(CreateReportCommand command)
+    public async Task<Result<Guid>> Handle(CreateReportCommand command, CancellationToken cancellationToken)
     {
-        var authState = await _authentiactionStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        var user = _httpContextAccessor.HttpContext?.User;
 
-        if (user.Identity is null || !user.Identity.IsAuthenticated)
+        if (user is null || !user.Identity?.IsAuthenticated == true)
         {
             throw new InvalidOperationException("Usuário não autenticado");
         }
 
         var userName = user.Identity.Name;
-        
 
-        var report = new Report(command.ReportName, command.TypeReport, command.ReportDescription, DateTime.UtcNow, userName!, command.IsEvent);
+        var report = new Report(
+            command.ReportName,
+            command.TypeReport,
+            command.ReportDescription,
+            DateTime.UtcNow,
+            userName!,
+            command.IsEvent
+        );
 
         await _reportRepository.AddAsync(report);
 
-        return new Response(report.Id);
+        return Result.Success(report.Id);
     }
-
 }
