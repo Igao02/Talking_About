@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Talking_About.Api.Infrastructure;
+using Talking_About.Infrastructure;
 using Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
 using Talking_About.Common.Api;
 using Talking_About.Extensions;
