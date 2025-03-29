@@ -1,7 +1,6 @@
 ﻿using Talking_About.SharedKernel;
-using TalkingAbout.SharedKernel;
 
-namespace Talking_About.Infrastructure;
+namespace Talking_About.Api.Infrastructure;
 
 public static class CustomResults
 {

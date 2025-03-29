@@ -10,6 +10,7 @@ using Talking_About.Components.Account;
 using Talking_About.Data;
 using Talking_About.Domain.Repositories;
 using Talking_About.Endpoints;
+using Talking_About.Extensions;
 using Talking_About.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -2,7 +2,7 @@
 using System.Reflection;
 using Talking_About.Common.Api;
 
-namespace Talking_About.Extensions;
+namespace Talking_About.Api.Extensions;
 
 public static class EndpointExtension
 {
