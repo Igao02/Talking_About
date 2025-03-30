@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using Talking_About.Api.Extensions;
 using Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
 using Talking_About.Data;
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //builder.Services.AddAntiforgery();
+builder.Services.AddAntiforgery();
+
 
 
 builder.Services.AddSwaggerGen();
@@ -22,6 +25,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Creat
 
 // Configuração da API
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 builder.Services.AddSwaggerGen();
 
 // Registro dos serviços de Identity
@@ -58,17 +62,19 @@ var app = builder.Build();
 // Configuração do pipeline
 if (app.Environment.IsDevelopment())
 {
+    app.UseWebAssemblyDebugging();
+    app.UseMigrationsEndPoint();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseAntiforgery();
-app.UseHttpsRedirection();
 
 // Configurar os endpoints da API
 app.MapIdentityApi<ApplicationUser>();
+app.UseAntiforgery();
 app.MapEndpoints();
 
 await app.RunAsync();

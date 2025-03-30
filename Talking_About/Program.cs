@@ -20,10 +20,10 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddAntiforgery();
-
-
+builder.Services.AddAuthorization();
 
 // Adicionando componentes interativos do Blazor
 builder.Services.AddRazorComponents()
@@ -61,16 +61,16 @@ builder.Services.AddHttpClient("ApiClient", client =>
 var app = builder.Build();
 
 // Aplicando autenticação e autorização no Blazor
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseAntiforgery();
 
 // Configuração do pipeline de desenvolvimento (Swagger)
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 // Mapeando recursos estáticos e Razor Components
 app.MapStaticAssets();
@@ -78,5 +78,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Talking_About.Client._Imports).Assembly);
+
+app.UseAntiforgery();
 
 await app.RunAsync();
