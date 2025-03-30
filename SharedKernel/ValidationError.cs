@@ -1,6 +1,4 @@
-﻿using TalkingAbout.SharedKernel;
-
-namespace Talking_About.SharedKernel;
+﻿namespace Talking_About.SharedKernel;
 
 public sealed record ValidationError : Error
 {

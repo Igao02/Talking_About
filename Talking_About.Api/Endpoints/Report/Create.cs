@@ -1,8 +1,7 @@
 ﻿using MediatR;
+using Talking_About.Api.Extensions;
 using Talking_About.Api.Infrastructure;
 using Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
-using Talking_About.Common.Api;
-using Talking_About.Extensions;
 using Talking_About.SharedKernel;
 
 namespace Talking_About.Api.Endpoints.Reports;
