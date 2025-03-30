@@ -1,0 +1,127 @@
+﻿@page "/CreateReport/Create"
+
+@rendermode InteractiveServer
+
+<PageTitle>Create Report</PageTitle>
+
+<h1>Criaaaar Publicação</h1>
+
+@* <FluentCard Class="full-page-background"></FluentCard> *@
+
+@* <FluentGrid> *@
+@*     <!-- Container Principal --> *@
+@*     <FluentGridItem Xs="12" Sm="10" Md="8" Lg="6"> *@
+@*         <FluentCard Id="post-container"> *@
+@*             <!-- Perfil do Usuário --> *@
+@*             <FluentGrid> *@
+@*                 <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                     <FluentCard Id="user-profile"> *@
+@*                         <FluentAvatar Name="Usuário Anônimo" Id="user-avatar" Class="mb-2" /> *@
+@*                         <AuthorizeView> *@
+@*                             <Authorized> *@
+@*                                 <FluentAnchor Href="Account/Manage"> *@
+@*                                     <FluentTypography Id="user-name"> *@
+@*                                         <span Class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name *@
+@*                                     </FluentTypography> *@
+@*                                 </FluentAnchor> *@
+@*                             </Authorized> *@
+@*                         </AuthorizeView> *@
+@*                     </FluentCard> *@
+@*                 </FluentGridItem> *@
+@*             </FluentGrid> *@
+
+@*             <!-- Formulário --> *@
+@*             <EditForm Model="@Model" OnValidSubmit="CreateReport"> *@
+@*                 <DataAnnotationsValidator></DataAnnotationsValidator> *@
+@*                 <ValidationSummary></ValidationSummary> *@
+
+@*                 <FluentGrid> *@
+@*                     <!-- Nome da Publicação --> *@
+@*                     <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                         <FluentStack Orientation="Orientation.Vertical"> *@
+@*                             <FluentTypography>Nome da Publicação</FluentTypography> *@
+@*                             <FluentTextField @bind-Value="Model.ReportName" Placeholder="Digite o nome da Publicação" Style="width: 100%"></FluentTextField> *@
+@*                         </FluentStack> *@
+@*                     </FluentGridItem> *@
+
+@*                     <!-- Tipo de Publicação --> *@
+@*                     <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                         <FluentStack Orientation="Vertical"> *@
+@*                             <FluentTypography>Tipo de Publicação</FluentTypography> *@
+@*                             <FluentSelect @bind-Value="Model.TypeReport" @onchange="OnTypeReportChanged"> *@
+@*                                 <FluentOption Value="" Disabled>Selecione o tipo de publicação</FluentOption> *@
+@*                                 <AuthorizeView Context="authContext" Roles="PARTNER"> *@
+@*                                     <FluentOption Value="Evento">Evento</FluentOption> *@
+@*                                 </AuthorizeView> *@
+@*                                 <FluentOption Value="Racismo">Discriminação racial</FluentOption> *@
+@*                                 <FluentOption Value="Discriminação feminina">Discriminação feminina</FluentOption> *@
+@*                                 <FluentOption Value="Discriminação de sexualidade">Discriminação de sexualidade</FluentOption> *@
+@*                             </FluentSelect> *@
+@*                         </FluentStack> *@
+@*                     </FluentGridItem> *@
+
+@*                     <!-- Descrição --> *@
+@*                     <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                         <FluentStack Orientation="Vertical"> *@
+@*                             <FluentTypography>Descrição da publicação</FluentTypography> *@
+@*                             <FluentTextArea @bind-Value="Model.ReportDescription" Placeholder="Digite a descrição da publicação" Style="width: 100%"></FluentTextArea> *@
+@*                         </FluentStack> *@
+@*                     </FluentGridItem> *@
+
+@*                     <!-- Upload de Imagens --> *@
+@*                     <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                         <FluentStack Orientation="Vertical"> *@
+@*                             <FluentTypography>Upload de Imagens</FluentTypography> *@
+@*                             <input type="file" multiple @onchange="HandleSelectedFiles" /> *@
+@*                         </FluentStack> *@
+@*                     </FluentGridItem> *@
+
+@*                     <!-- Preview de Imagens --> *@
+@*                     <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                         <FluentStack Orientation="Horizontal"> *@
+@*                             @foreach (var imageUrl in imagePreviewUrls) *@
+@*                             { *@
+@*                                 <FluentImage Src="@imageUrl" Alt="Image Preview" Class="img-thumbnail" Style="max-width: 100px; margin-right: 10px;" /> *@
+@*                             } *@
+@*                         </FluentStack> *@
+@*                     </FluentGridItem> *@
+@*                 </FluentGrid> *@
+
+@*                 <!-- Botões --> *@
+@*                 <FluentGrid> *@
+@*                     <FluentGridItem Xs="12" Sm="6" Md="6" Lg="6"> *@
+@*                         <FluentButton Type="submit" Appearance="Accent">Publicar</FluentButton> *@
+@*                     </FluentGridItem> *@
+@*                     <FluentGridItem Xs="12" Sm="6" Md="6" Lg="6"> *@
+@*                         <FluentButton Type="button" Appearance="Stealth" @onclick="Cancel">Cancelar</FluentButton> *@
+@*                     </FluentGridItem> *@
+@*                 </FluentGrid> *@
+@*             </EditForm> *@
+
+@*             <!-- Status do Upload --> *@
+@*             <FluentGrid> *@
+@*                 <FluentGridItem Xs="12" Sm="12" Md="12" Lg="12"> *@
+@*                     @if (uploadInProgress) *@
+@*                     { *@
+@*                         <FluentBadge Appearance="Accent">Upload de imagens em progresso...</FluentBadge> *@
+@*                     } *@
+
+@*                     @if (!string.IsNullOrEmpty(successMessage)) *@
+@*                     { *@
+@*                         <FluentBadge Appearance="Success">@successMessage</FluentBadge> *@
+@*                     } *@
+
+@*                     @if (!string.IsNullOrEmpty(errorMessage)) *@
+@*                     { *@
+@*                         <FluentBadge Appearance="Error">@errorMessage</FluentBadge> *@
+@*                     } *@
+@*                 </FluentGridItem> *@
+@*             </FluentGrid> *@
+@*         </FluentCard> *@
+@*     </FluentGridItem> *@
+@* </FluentGrid> *@
+
+
+@code {
+
+}
