@@ -1,6 +1,6 @@
-﻿namespace Talking_About.Api.Common.Api;
+﻿//namespace Talking_About.Api.Common.Api;
 
-public interface IEndpoint
-{
-    void MapEndpoint(IEndpointRouteBuilder app);
-}
+//public interface IEndpoint
+//{
+//    void MapEndpoints(IEndpointRouteBuilder app);
+//}

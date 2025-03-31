@@ -4,24 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Talking_About.Components;
 using Talking_About.Components.Account;
-using Talking_About.Data; // Referência para ApplicationDbContext
+using Talking_About.Data; 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuração do banco de dados e Identity para Blazor
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));  // Verifique se a string de conexão está correta
-
-// Configuração do Identity no Blazor (Descomente e ajuste conforme necessário)
-builder.Services.AddIdentityCore<ApplicationUser>(options =>
-    options.SignIn.RequireConfirmedAccount = true) // Você pode ajustar a configuração conforme necessário
-    .AddSignInManager()
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));  
 
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
 builder.Services.AddAntiforgery();
 builder.Services.AddAuthorization();
 
@@ -51,11 +42,20 @@ builder.Services.AddAuthentication(options =>
 })
 .AddIdentityCookies();
 
+// Configuração do Identity no Blazor (Descomente e ajuste conforme necessário)
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+    options.SignIn.RequireConfirmedAccount = true) 
+    .AddSignInManager()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 // Configuração do HttpClient para se comunicar com o back-end
 builder.Services.AddHttpClient("ApiClient", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7249"); // URL do seu back-end API
+    client.BaseAddress = new Uri("https://localhost:7249"); 
 });
+
 
 // Configuração do Blazor
 var app = builder.Build();
@@ -64,13 +64,6 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Configuração do pipeline de desenvolvimento (Swagger)
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
 
 // Mapeando recursos estáticos e Razor Components
 app.MapStaticAssets();
