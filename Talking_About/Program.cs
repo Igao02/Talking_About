@@ -2,86 +2,76 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
-using System.Reflection;
-using Talking_About.Application.UseCases.ReportUseCase.CreateUseCase;
 using Talking_About.Components;
 using Talking_About.Components.Account;
-using Talking_About.Data;
-using Talking_About.Domain.Repositories;
-using Talking_About.Extensions;
-using Talking_About.Infrastructure.Repositories;
+using Talking_About.Data; 
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuração do banco de dados e Identity para Blazor
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));  
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAntiforgery();
+builder.Services.AddAuthorization();
+
+// Adicionando componentes interativos do Blazor
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents()
     .AddAuthenticationStateSerialization();
 builder.Services.AddFluentUIComponents();
-builder.Services.AddHttpContextAccessor();
 
-
+// Configuração de autenticação e Identity
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+//builder.Logging.AddConsole();
+builder.Services.AddAntiforgery();
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
-    .AddIdentityCookies();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddSignInManager()
-    .AddRoles<IdentityRole>()
-    .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.AddMediatR(cfg =>
-           cfg.RegisterServicesFromAssembly(typeof(CreateReportCommand).Assembly));
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSenderService>();
-builder.Services.AddTransient<IReportRepository, ReportRepository>();
-builder.Services.AddTransient<IImageRepository, ImageRepository>();
-builder.Services.AddTransient<ICommentRepository, CommentRepository>();
-builder.Services.AddTransient<ILikeRepository, LikeRepository>();
-builder.Services.AddTransient<IInstitutionRepository, InstitutionRepository>();
 
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+})
+.AddIdentityCookies();
+
+// Configuração do Identity no Blazor (Descomente e ajuste conforme necessário)
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+    options.SignIn.RequireConfirmedAccount = true) 
+    .AddSignInManager()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+// Configuração do HttpClient para se comunicar com o back-end
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7249"); 
+});
+
+
+// Configuração do Blazor
 var app = builder.Build();
 
+// Aplicando autenticação e autorização no Blazor
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseWebAssemblyDebugging();
-    app.UseMigrationsEndPoint();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+// Mapeando recursos estáticos e Razor Components
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Talking_About.Client._Imports).Assembly);
 
-//app.MapAdditionalIdentityEndpoints();
-app.MapIdentityApi<ApplicationUser>();
 app.UseAntiforgery();
-app.MapEndpoints();
 
-app.Run();
+await app.RunAsync();

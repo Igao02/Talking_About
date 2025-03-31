@@ -26,7 +26,7 @@ public sealed class CreateReportHandler : ICommandHandler<CreateReportCommand, G
             throw new InvalidOperationException("Usuário não autenticado");
         }
 
-        var userName = user.Identity.Name;
+        var userName = user?.Identity?.Name;
 
         var report = new Report(
             command.ReportName,

@@ -1,6 +1,6 @@
 ﻿using Talking_About.SharedKernel;
 
-namespace Talking_About.Extensions;
+namespace Talking_About.Api.Extensions;
 
 public static class ResultExtensions
 {

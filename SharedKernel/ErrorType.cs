@@ -1,4 +1,4 @@
-﻿namespace TalkingAbout.SharedKernel;
+﻿namespace Talking_About.SharedKernel;
 
 public enum ErrorType
 {

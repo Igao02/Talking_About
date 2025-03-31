@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
-using Talking_About.Common.Api;
+using Talking_About.Api.Endpoints;
 
 namespace Talking_About.Api.Extensions;
 
@@ -35,7 +35,7 @@ public static class EndpointExtension
 
         foreach (IEndpoint endpoint in endpoints)
         {
-            endpoint.MapEndpoint(builder);
+            endpoint.MapEndpoints(builder);
         }
 
         return app;

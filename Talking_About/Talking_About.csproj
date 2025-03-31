@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Talking_About.Domain.csproj" />
     <ProjectReference Include="..\SharedKernel\Talking_About.SharedKernel.csproj" />
+    <ProjectReference Include="..\Talking_About.Api\Talking_About.Api.csproj" />
     <ProjectReference Include="..\Talking_About.Application\Talking_About.Application.csproj" />
     <ProjectReference Include="..\Talking_About.Client\Talking_About.Client.csproj" />
     <ProjectReference Include="..\Talking_About.Infrastructure\Talking_About.Infrastructure.csproj" />
@@ -28,5 +29,8 @@
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.6" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.0.0" />
   </ItemGroup>
 </Project>
